@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -11,38 +13,64 @@ class AuthController extends Controller
         return view('login');
     }
 
+    public function showRegister()
+    {
+        return view('register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required|unique:users,username',
+            'password' => 'required|min:6'
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect('/login')
+            ->with('success', 'Đăng ký tài khoản thành công');
+    }
+
     public function login(Request $request)
     {
         $username = $request->username;
         $password = $request->password;
 
-        // Kiểm tra thông tin cố định
-        if ($username == 'admin' && $password == '123456') {
-            // Nếu đúng: Lưu trạng thái vào Session
+        $user = User::where('username', $username)->first();
+
+        if ($user && Hash::check($password, $user->password)) {
             session([
                 'isLogin' => true,
-                'username' => $username
+                'username' => $user->username,
+                'name' => $user->name,
+                'user_id' => $user->id
             ]);
+
             return redirect('/dashboard');
         }
 
-        // Nếu sai: Quay lại trang login kèm thông báo lỗi
-        return redirect('/login')->with('error', 'Sai tên đăng nhập hoặc mật khẩu');
+        return redirect('/login')
+            ->with('error', 'Sai tên đăng nhập hoặc mật khẩu');
     }
 
     public function dashboard()
     {
-        // Kiểm tra nếu chưa đăng nhập thì không cho xem dashboard
         if (!session('isLogin')) {
             return redirect('/login');
         }
+
         return view('dashboard');
     }
 
     public function logout()
     {
-        // Xóa sạch session và về trang login
         session()->flush();
+
         return redirect('/login');
     }
 }

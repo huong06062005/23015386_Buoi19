@@ -13,6 +13,8 @@ Route::get('/login', [AuthController::class, 'showLogin']);
 
 // Xử lý dữ liệu khi bấm nút Login (Phương thức POST)
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister']);
+Route::post('/register', [AuthController::class, 'register']);
 
 // Trang Dashboard (Chỉ vào được khi đã đăng nhập)
 Route::get('/dashboard', [AuthController::class, 'dashboard']);
