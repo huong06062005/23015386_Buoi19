@@ -6,19 +6,12 @@
 <body>
 
 <h1>ĐĂNG NHẬP THÀNH CÔNG</h1>
-
-<p>
-    Xin chào:
-    {{ session('name') }}
-</p>
-
-<p>
-    Username:
-    {{ session('username') }}
-</p>
-
+<p>Họ tên: {{ session('name') }}</p>
+<p>Username: {{ session('username') }}</p>
+<p>Email: {{ session('email') }}</p>
+<p>Thời gian đăng nhập: {{ session('login_time') }}</p>
 <a href="{{ url('/logout') }}">
-    Logout
+Logout
 </a>
 
 </body>

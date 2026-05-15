@@ -1,0 +1,2 @@
+$table->string('email')->unique();
+Sau đó chạy: php artisan migrate:fresh

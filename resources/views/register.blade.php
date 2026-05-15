@@ -42,13 +42,18 @@
     <input type="password" name="password">
 
     <br><br>
+    <div>Email</div>
+    <input type="email" name="email" value="{{ old('email') }}">
+    <br><br>
 
     <button type="submit">
         Register
     </button>
 
 </form>
-
+    <div>Confirm Password</div>
+    <input type="password" name="confirm_password">
+    <br><br>
 <br>
 
 <a href="{{ url('/login') }}">
